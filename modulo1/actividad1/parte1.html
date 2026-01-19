@@ -1,572 +1,581 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Línea de Tiempo de la Inteligencia Artificial</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
     <style>
-        * {
-            font-family: 'Inter', sans-serif;
-        }
-        
+      * {
+        font-family: 'Inter', sans-serif;
+      }
+
+      .timeline-line {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 4px;
+        height: 100%;
+        background: linear-gradient(to bottom, #3b82f6, #8b5cf6, #10b981);
+        z-index: 1;
+      }
+
+      .timeline-dot {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background-color: #3b82f6;
+        border: 4px solid white;
+        z-index: 2;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .card-left {
+        margin-right: calc(50% + 30px);
+        text-align: right;
+      }
+
+      .card-right {
+        margin-left: calc(50% + 30px);
+        text-align: left;
+      }
+
+      @media (max-width: 768px) {
         .timeline-line {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 4px;
-            height: 100%;
-            background: linear-gradient(to bottom, #3b82f6, #8b5cf6, #10b981);
-            z-index: 1;
+          left: 30px;
         }
-        
+
         .timeline-dot {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background-color: #3b82f6;
-            border: 4px solid white;
-            z-index: 2;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          left: 30px;
         }
-        
-        .card-left {
-            margin-right: calc(50% + 30px);
-            text-align: right;
-        }
-        
+
+        .card-left,
         .card-right {
-            margin-left: calc(50% + 30px);
-            text-align: left;
+          margin-left: 60px;
+          margin-right: 20px;
+          text-align: left;
         }
-        
-        @media (max-width: 768px) {
-            .timeline-line {
-                left: 30px;
-            }
-            
-            .timeline-dot {
-                left: 30px;
-            }
-            
-            .card-left, .card-right {
-                margin-left: 60px;
-                margin-right: 20px;
-                text-align: left;
-            }
-        }
+      }
+
+      .print-btn {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        background: #3b82f6;
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 6px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        z-index: 100;
+      }
+
+      .print-btn:hover {
+        background: #2563eb;
+      }
     </style>
-</head>
-<body class="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen">
+  </head>
+  <body class="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen">
+    <button onclick="window.print()" class="print-btn no-print"><i class="fas fa-print mr-2"></i> Imprimir Reporte</button>
     <div class="container mx-auto px-4 py-12">
-        <div class="text-center mb-16">
-            <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
-                <i class="fas fa-brain text-blue-500 mr-3"></i>
-                Evolución y relevancia de la inteligencia artificial
-            </h1>
-            <p class="text-gray-600 text-lg max-w-3xl mx-auto">
-                Un recorrido histórico por los hitos más importantes en el desarrollo de la inteligencia artificial desde 1950 hasta la actualidad.
-            </p>
+      <div class="text-center mb-16">
+        <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
+          <i class="fas fa-brain text-blue-500 mr-3"></i>
+          Evolución y relevancia de la inteligencia artificial
+        </h1>
+        <p class="text-gray-600 text-lg max-w-3xl mx-auto">
+          Un recorrido histórico por los hitos más importantes en el desarrollo de la inteligencia artificial desde 1950 hasta la actualidad.
+        </p>
+      </div>
+
+      <div class="relative">
+        <div class="timeline-line"></div>
+
+        <div class="space-y-20">
+          <div class="relative">
+            <div class="timeline-dot"></div>
+
+            <div class="flex justify-center mb-10">
+              <div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-3 rounded-full font-bold text-lg shadow-lg">1950 &nbsp; 1960</div>
+            </div>
+
+            <div class="card-left">
+              <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-blue-500">
+                <div class="flex items-start">
+                  <div class="bg-blue-100 p-3 rounded-lg mr-4">
+                    <i class="fas fa-robot text-blue-600 text-xl"></i>
+                  </div>
+                  <div>
+                    <div class="flex items-center mb-2">
+                      <span class="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-semibold">1950</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Test de Turing</h3>
+                    <p class="text-gray-600">
+                      Alan Turing propone la 'prueba de turing', la cual es una herramienta para evaluar la capacidad de una maquina (con software) para mostrar comportamiento
+                      similar al de un ser humano; Esta prueba consiste en evaluar una conversarion entre un humano y una maquina desarrollada para generar frases o conversaciones
+                      similares a las de un humano. Para esta prueba existiria un evaluador; cuando el evaluador no pueda distinguir entre el humano y la maquina, la maquina habria
+                      pasado la prueba.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="relative">
+            <div class="timeline-dot"></div>
+
+            <div class="flex justify-center mb-10">
+              <div class="bg-gradient-to-r from-purple-500 to-purple-600 text-white px-6 py-3 rounded-full font-bold text-lg shadow-lg">1960 &nbsp; 1970</div>
+            </div>
+
+            <div class="card-right">
+              <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-purple-500">
+                <div class="flex items-start">
+                  <div class="bg-purple-100 p-3 rounded-lg mr-4">
+                    <i class="fas fa-comments text-purple-600 text-xl"></i>
+                  </div>
+                  <div>
+                    <div class="flex items-center mb-2">
+                      <span class="inline-block bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-semibold">1966</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">ELIZA</h3>
+                    <p class="text-gray-600">
+                      Joseph Weizenbaum creo ELIZA, un programa que aseguraba poder pasar la prueba de Turing y uno de los primeros sistemas de procesamiento de lenguaje natural.
+                      ELIZA simulaba a una psicóloga rogeriana y fue un hito en la interacción humano-computadora. ELIZA funcionaba mediante busquedas de palabras clave; en caso de
+                      encontrar alguna palabra clave, una regla transformaba el comentario y regresaba una oracion resultante. ELIZA fue suficientemente bueno(a) como para poder
+                      confundir a las personas, por lo que se afirma que fue el primero en pasar la prueba de Turing.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="relative">
+            <div class="timeline-dot"></div>
+
+            <div class="flex justify-center mb-10">
+              <div class="bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-3 rounded-full font-bold text-lg shadow-lg">1970 &nbsp; 1980</div>
+            </div>
+
+            <div class="card-left">
+              <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-green-500">
+                <div class="flex items-start">
+                  <div class="bg-green-100 p-3 rounded-lg mr-4">
+                    <i class="fas fa-stethoscope text-green-600 text-xl"></i>
+                  </div>
+                  <div>
+                    <div class="flex items-center mb-2">
+                      <span class="inline-block bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-semibold">1972</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">MYCIN</h3>
+                    <p class="text-gray-600">
+                      Nace MYCIN, fue sistema experto para diagnóstico médico basado en reglas. Su ibjetivo era facilitar el diagnostico de enfermedades de la sangre, identificando
+                      bacterias responsables de infecciones y sugeria antibioticos adecuados. <br />
+                      MYCIN se baso en el paradigma de causa-efecto, basado en al rededor de 500 reglas.<br />
+                      Es importante mencionar que MYCIN requeria una base de conocimientos con datos y reglas de dagnostico creadas por expertos sin llegar a aprender o modificar
+                      las reglas con mas datos de entrada.<br />
+                      Fue uno de los primeros sistemas de inteligencia artificial en demostrar un rendimiento comparable (o incluso superando) al de expertos humanos en un dominio
+                      específico.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="relative">
+            <div class="timeline-dot"></div>
+
+            <div class="flex justify-center mb-10">
+              <div class="bg-gradient-to-r from-yellow-500 to-yellow-600 text-white px-6 py-3 rounded-full font-bold text-lg shadow-lg">1980 &nbsp; 1990</div>
+            </div>
+
+            <div class="card-right">
+              <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-yellow-500">
+                <div class="flex items-start">
+                  <div class="bg-yellow-100 p-3 rounded-lg mr-4">
+                    <i class="fas fa-project-diagram text-yellow-600 text-xl"></i>
+                  </div>
+                  <div>
+                    <div class="flex items-center mb-2">
+                      <span class="inline-block bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-semibold">1986</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Algoritmo Backpropagation (retropropagacion)</h3>
+                    <p class="text-gray-600">
+                      Rumelhart, Hinton y Williams popularizan el algoritmo de backpropagation para entrenar redes neuronales multicapa y que es una tecnica para optimizar redes
+                      neuronales. <br />
+                      Se le llama retropropagacion, ya que calcula la manera en que los cambios en los sesgos de una red neuronal afectan la precision de las predicciones.<br />
+                      Este avance permitió entrenar redes más profundas y complejas, sentando las bases para el deep learning moderno.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="relative">
+            <div class="timeline-dot"></div>
+
+            <div class="flex justify-center mb-10">
+              <div class="bg-gradient-to-r from-red-500 to-red-600 text-white px-6 py-3 rounded-full font-bold text-lg shadow-lg">1990 &nbsp; 2000</div>
+            </div>
+
+            <div class="card-left">
+              <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-red-500">
+                <div class="flex items-start">
+                  <div class="bg-red-100 p-3 rounded-lg mr-4">
+                    <i class="fas fa-chess-board text-red-600 text-xl"></i>
+                  </div>
+                  <div>
+                    <div class="flex items-center mb-2">
+                      <span class="inline-block bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-semibold">1997</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Deep Blue vs. Kasparov</h3>
+                    <p class="text-gray-600">
+                      IBM creo Deep Blue, un superordenador co 30 procesadores P2 de 120 MHz, capaz de caulcular 200 millones de jugadas por minuto. Deep Blue logro vencer al
+                      ajedrecista Garry Kasparov el 11 de mayo de 1997.<br />
+                      Aun que se habla unicamente de Deep Blue, en realidad Watson, un sistema basado en IA, logro ser vencedor en el programa Jeopardy.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="relative">
+            <div class="timeline-dot"></div>
+
+            <div class="flex justify-center mb-10">
+              <div class="bg-gradient-to-r from-indigo-500 to-indigo-600 text-white px-6 py-3 rounded-full font-bold text-lg shadow-lg">2000 &nbsp; 2010</div>
+            </div>
+
+            <div class="space-y-8">
+              <div class="card-right">
+                <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-indigo-500">
+                  <div class="flex items-start">
+                    <div class="bg-indigo-100 p-3 rounded-lg mr-4">
+                      <i class="fas fa-layer-group text-indigo-600 text-xl"></i>
+                    </div>
+                    <div>
+                      <div class="flex items-center mb-2">
+                        <span class="inline-block bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm font-semibold">2006</span>
+                      </div>
+                      <h3 class="text-xl font-bold text-gray-800 mb-2">Renacimiento del Deep Learning</h3>
+                      <p class="text-gray-600">
+                        Geoffrey Hinton demostraron que las redes neuronales podian reconocer imagenes con alta precision. Tambien investigo las formas de usar las redes neuronales
+                        para aprendizaje de maquina, memoria, percepcion y proceamisneo de simbolos.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card-left">
+                <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-indigo-500">
+                  <div class="flex items-start">
+                    <div class="bg-indigo-100 p-3 rounded-lg mr-4">
+                      <i class="fas fa-microphone-alt text-indigo-600 text-xl"></i>
+                    </div>
+                    <div>
+                      <div class="flex items-center mb-2">
+                        <span class="inline-block bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm font-semibold">2009</span>
+                      </div>
+                      <h3 class="text-xl font-bold text-gray-800 mb-2">Reconocimiento de voz a gran escala</h3>
+                      <p class="text-gray-600">
+                        Google lanza "Google Voice" que permite agrupar las llamadas telefonica, o convertir mensajes de voz en texto para ser enviados por e-mail. <br />
+                        Para esto, Google emplea tecnologia de reconocimiento de voz que permite, por ejemplo, encargar comida unicamente marcando un codigo de estado y decidir que
+                        servicio requieres. <br />
+                        Tambien es posible hacer llamadas internacionales a bajo coste.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="relative">
+            <div class="timeline-dot"></div>
+
+            <div class="flex justify-center mb-10">
+              <div class="bg-gradient-to-r from-pink-500 to-pink-600 text-white px-6 py-3 rounded-full font-bold text-lg shadow-lg">2010 &nbsp; Actualidad</div>
+            </div>
+
+            <div class="space-y-8">
+              <div class="card-right">
+                <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-pink-500">
+                  <div class="flex items-start">
+                    <div class="bg-pink-100 p-3 rounded-lg mr-4">
+                      <i class="fas fa-eye text-pink-600 text-xl"></i>
+                    </div>
+                    <div>
+                      <div class="flex items-center mb-2">
+                        <span class="inline-block bg-pink-100 text-pink-800 px-3 py-1 rounded-full text-sm font-semibold">2012</span>
+                      </div>
+                      <h3 class="text-xl font-bold text-gray-800 mb-2">AlexNet</h3>
+                      <p class="text-gray-600">
+                        AlexNet revoluciona la visión por computadora al ganar el desafío ImageNet con deep learning. Su arquitectura CNN demostró una precisión sin precedentes en
+                        clasificación de imágenes.<br />
+                        Esto se logro mediante millones de fotos reales que las personas etiquetaron detalladamente usando Amazon Mchanical Turk, permitiendo construir una base de
+                        datos organizada segun la jerarquia de WordNet.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card-left">
+                <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-pink-500">
+                  <div class="flex items-start">
+                    <div class="bg-pink-100 p-3 rounded-lg mr-4">
+                      <i class="fas fa-gamepad text-pink-600 text-xl"></i>
+                    </div>
+                    <div>
+                      <div class="flex items-center mb-2">
+                        <span class="inline-block bg-pink-100 text-pink-800 px-3 py-1 rounded-full text-sm font-semibold">2016</span>
+                      </div>
+                      <h3 class="text-xl font-bold text-gray-800 mb-2">AlphaGo</h3>
+                      <p class="text-gray-600">
+                        AlphaGo fue una red neuronal desarrollada por Deep Mind con el unico objetivo de ganar al campeon del mundo de Go. Este desarrollo se logro despues de dos
+                        anios de trabajo codificando un algoritmo capaz de aprender las reglas del juego Go, entranandolo con miles de partidas descargadas de internet.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card-right">
+                <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-pink-500">
+                  <div class="flex items-start">
+                    <div class="bg-pink-100 p-3 rounded-lg mr-4">
+                      <i class="fas fa-language text-pink-600 text-xl"></i>
+                    </div>
+                    <div>
+                      <div class="flex items-center mb-2">
+                        <span class="inline-block bg-pink-100 text-pink-800 px-3 py-1 rounded-full text-sm font-semibold">2018</span>
+                      </div>
+                      <h3 class="text-xl font-bold text-gray-800 mb-2">Modelos Transformer</h3>
+                      <p class="text-gray-600">
+                        BERT (Bidirectional Encoder Representations from Transformers) es el primer LLM desarollado en 2018 por Google. El exito de BERT se debio a su arquitectura
+                        de transformadores, la cual se basa en el mecanismo de la atencion. Originalmente las predicciones eran unidireccionales, es decir, prediciendo la siguiente
+                        palabra. Las arquitecturas de transformadores son bidireccionales, es decir, predicen basado en palabras anteriores y siguientes.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card-left">
+                <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-pink-500">
+                  <div class="flex items-start">
+                    <div class="bg-pink-100 p-3 rounded-lg mr-4">
+                      <i class="fas fa-magic text-pink-600 text-xl"></i>
+                    </div>
+                    <div>
+                      <div class="flex items-center mb-2">
+                        <span class="inline-block bg-pink-100 text-pink-800 px-3 py-1 rounded-full text-sm font-semibold">2022</span>
+                      </div>
+                      <h3 class="text-xl font-bold text-gray-800 mb-2">IA Generativa</h3>
+                      <p class="text-gray-600">
+                        Despues de el lanzamiento de ChatGPT, basado en el modelo GPT-3.5, en noviembre de 2022, la inteligencia artificial tomo un rumbo inesperado. A diferencia
+                        del pasado , como con ELIZA, los modelos de IA generativa no tienen reglas o plantillas y son expuestos al mundo mediante entrenamiento con informacion del
+                        mundo real, desarrollando inteligencia.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div class="relative">
-            <div class="timeline-line"></div>
-            
-            <div class="space-y-20">
-                
-                <div class="relative">
-                    <div class="timeline-dot"></div>
-                    
-                    <div class="flex justify-center mb-10">
-                        <div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-3 rounded-full font-bold text-lg shadow-lg">
-                            1950 &nbsp; 1960
-                        </div>
-                    </div>
-                    
-                    <div class="card-left">
-                        <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-blue-500">
-                            <div class="flex items-start">
-                                <div class="bg-blue-100 p-3 rounded-lg mr-4">
-                                    <i class="fas fa-robot text-blue-600 text-xl"></i>
-                                </div>
-                                <div>
-                                    <div class="flex items-center mb-2">
-                                        <span class="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-semibold">1950</span>
-                                    </div>
-                                    <h3 class="text-xl font-bold text-gray-800 mb-2">Test de Turing</h3>
-                                    <p class="text-gray-600">
-                                        Alan Turing propone la 'prueba de turing', la cual es una herramienta para evaluar la capacidad de una maquina (con software) para mostrar comportamiento similar al de un ser humano; Esta prueba consiste en evaluar 
-                                        una conversarion entre un humano y una maquina desarrollada para generar frases o conversaciones similares a las de un humano. Para esta prueba existiria un evaluador; cuando el evaluador no pueda distinguir entre el humano y la
-                                        maquina, la maquina habria pasado la prueba.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="relative">
-                    <div class="timeline-dot"></div>
-                    
-                    <div class="flex justify-center mb-10">
-                        <div class="bg-gradient-to-r from-purple-500 to-purple-600 text-white px-6 py-3 rounded-full font-bold text-lg shadow-lg">
-                            1960 &nbsp; 1970
-                        </div>
-                    </div>
-                    
-                    <div class="card-right">
-                        <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-purple-500">
-                            <div class="flex items-start">
-                                <div class="bg-purple-100 p-3 rounded-lg mr-4">
-                                    <i class="fas fa-comments text-purple-600 text-xl"></i>
-                                </div>
-                                <div>
-                                    <div class="flex items-center mb-2">
-                                        <span class="inline-block bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-semibold">1966</span>
-                                    </div>
-                                    <h3 class="text-xl font-bold text-gray-800 mb-2">ELIZA</h3>
-                                    <p class="text-gray-600">
-                                        Joseph Weizenbaum creo ELIZA, un programa que aseguraba poder pasar la prueba de Turing y uno de los primeros sistemas de procesamiento de lenguaje natural. 
-                                        ELIZA simulaba a una psicóloga rogeriana y fue un hito en la interacción humano-computadora. ELIZA funcionaba mediante busquedas de palabras clave; en caso de encontrar alguna palabra clave, una regla
-                                        transformaba el comentario y regresaba una oracion resultante. ELIZA fue suficientemente bueno(a) como para poder confundir a las personas, por lo que se afirma que fue el primero en pasar la prueba de Turing.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="relative">
-                    <div class="timeline-dot"></div>
-                    
-                    <div class="flex justify-center mb-10">
-                        <div class="bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-3 rounded-full font-bold text-lg shadow-lg">
-                            1970 &nbsp; 1980
-                        </div>
-                    </div>
-                    
-                    <div class="card-left">
-                        <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-green-500">
-                            <div class="flex items-start">
-                                <div class="bg-green-100 p-3 rounded-lg mr-4">
-                                    <i class="fas fa-stethoscope text-green-600 text-xl"></i>
-                                </div>
-                                <div>
-                                    <div class="flex items-center mb-2">
-                                        <span class="inline-block bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-semibold">1972</span>
-                                    </div>
-                                    <h3 class="text-xl font-bold text-gray-800 mb-2">MYCIN</h3>
-                                    <p class="text-gray-600">
-                                        Nace MYCIN, fue sistema experto para diagnóstico médico basado en reglas. Su ibjetivo era facilitar el diagnostico de enfermedades de la sangre, identificando bacterias responsables de infecciones y 
-                                        sugeria antibioticos adecuados. <br />
-                                        MYCIN se baso en el paradigma de causa-efecto, basado en al rededor de 500 reglas.<br />
-                                        Es importante mencionar que MYCIN requeria una base de conocimientos con datos y reglas de dagnostico creadas por expertos sin llegar a aprender o modificar las reglas con mas datos de entrada.<br />
-                                        Fue uno de los primeros sistemas de inteligencia artificial en demostrar un rendimiento comparable (o incluso superando) al de expertos humanos en un dominio específico.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="relative">
-                    <div class="timeline-dot"></div>
-                    
-                    <div class="flex justify-center mb-10">
-                        <div class="bg-gradient-to-r from-yellow-500 to-yellow-600 text-white px-6 py-3 rounded-full font-bold text-lg shadow-lg">
-                            1980 &nbsp; 1990
-                        </div>
-                    </div>
-                    
-                    <div class="card-right">
-                        <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-yellow-500">
-                            <div class="flex items-start">
-                                <div class="bg-yellow-100 p-3 rounded-lg mr-4">
-                                    <i class="fas fa-project-diagram text-yellow-600 text-xl"></i>
-                                </div>
-                                <div>
-                                    <div class="flex items-center mb-2">
-                                        <span class="inline-block bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-semibold">1986</span>
-                                    </div>
-                                    <h3 class="text-xl font-bold text-gray-800 mb-2">Algoritmo Backpropagation (retropropagacion)</h3>
-                                    <p class="text-gray-600">
-                                        Rumelhart, Hinton y Williams popularizan el algoritmo de backpropagation para entrenar redes neuronales multicapa y que es una tecnica para optimizar redes neuronales. <br />
-                                        Se le llama retropropagacion, ya que calcula la manera en que los cambios en los sesgos de una red neuronal afectan la precision de las predicciones.<br />
-                                        Este avance permitió entrenar redes más profundas y complejas, sentando las bases para el deep learning moderno.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="relative">
-                    <div class="timeline-dot"></div>
-                    
-                    <div class="flex justify-center mb-10">
-                        <div class="bg-gradient-to-r from-red-500 to-red-600 text-white px-6 py-3 rounded-full font-bold text-lg shadow-lg">
-                            1990 &nbsp; 2000
-                        </div>
-                    </div>
-                    
-                    <div class="card-left">
-                        <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-red-500">
-                            <div class="flex items-start">
-                                <div class="bg-red-100 p-3 rounded-lg mr-4">
-                                    <i class="fas fa-chess-board text-red-600 text-xl"></i>
-                                </div>
-                                <div>
-                                    <div class="flex items-center mb-2">
-                                        <span class="inline-block bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-semibold">1997</span>
-                                    </div>
-                                    <h3 class="text-xl font-bold text-gray-800 mb-2">Deep Blue vs. Kasparov</h3>
-                                    <p class="text-gray-600">
-                                        IBM creo Deep Blue, un superordenador co 30 procesadores P2 de 120 MHz, capaz de caulcular 200 millones de jugadas por minuto. Deep Blue logro vencer al ajedrecista Garry Kasparov el 11 de mayo de 1997.<br />
-                                        Aun que se habla unicamente de Deep Blue, en realidad Watson, un sistema basado en IA, logro ser vencedor en el programa Jeopardy.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="relative">
-                    <div class="timeline-dot"></div>
-                    
-                    <div class="flex justify-center mb-10">
-                        <div class="bg-gradient-to-r from-indigo-500 to-indigo-600 text-white px-6 py-3 rounded-full font-bold text-lg shadow-lg">
-                            2000 &nbsp; 2010
-                        </div>
-                    </div>
-                    
-                    <div class="space-y-8">
-                        <div class="card-right">
-                            <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-indigo-500">
-                                <div class="flex items-start">
-                                    <div class="bg-indigo-100 p-3 rounded-lg mr-4">
-                                        <i class="fas fa-layer-group text-indigo-600 text-xl"></i>
-                                    </div>
-                                    <div>
-                                        <div class="flex items-center mb-2">
-                                            <span class="inline-block bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm font-semibold">2006</span>
-                                        </div>
-                                        <h3 class="text-xl font-bold text-gray-800 mb-2">Renacimiento del Deep Learning</h3>
-                                        <p class="text-gray-600">
-                                            Geoffrey Hinton demostraron que las redes neuronales podian reconocer imagenes con alta precision. Tambien investigo las formas de usar las redes neuronales para 
-                                            aprendizaje de maquina, memoria, percepcion y proceamisneo de simbolos.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="card-left">
-                            <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-indigo-500">
-                                <div class="flex items-start">
-                                    <div class="bg-indigo-100 p-3 rounded-lg mr-4">
-                                        <i class="fas fa-microphone-alt text-indigo-600 text-xl"></i>
-                                    </div>
-                                    <div>
-                                        <div class="flex items-center mb-2">
-                                            <span class="inline-block bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm font-semibold">2009</span>
-                                        </div>
-                                        <h3 class="text-xl font-bold text-gray-800 mb-2">Reconocimiento de voz a gran escala</h3>
-                                        <p class="text-gray-600">
-                                            Google lanza "Google Voice" que permite agrupar las llamadas telefonica, o convertir mensajes de voz en texto para ser enviados por e-mail. <br />
-                                            Para esto, Google emplea tecnologia de reconocimiento de voz que permite, por ejemplo, encargar comida unicamente marcando un codigo de estado y decidir que servicio requieres. <br />
-                                            Tambien es posible hacer llamadas internacionales a bajo coste.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="relative">
-                    <div class="timeline-dot"></div>
-                    
-                    <div class="flex justify-center mb-10">
-                        <div class="bg-gradient-to-r from-pink-500 to-pink-600 text-white px-6 py-3 rounded-full font-bold text-lg shadow-lg">
-                            2010 &nbsp; Actualidad
-                        </div>
-                    </div>
-                    
-                    <div class="space-y-8">
-                        <div class="card-right">
-                            <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-pink-500">
-                                <div class="flex items-start">
-                                    <div class="bg-pink-100 p-3 rounded-lg mr-4">
-                                        <i class="fas fa-eye text-pink-600 text-xl"></i>
-                                    </div>
-                                    <div>
-                                        <div class="flex items-center mb-2">
-                                            <span class="inline-block bg-pink-100 text-pink-800 px-3 py-1 rounded-full text-sm font-semibold">2012</span>
-                                        </div>
-                                        <h3 class="text-xl font-bold text-gray-800 mb-2">AlexNet</h3>
-                                        <p class="text-gray-600">
-                                            AlexNet revoluciona la visión por computadora al ganar el desafío ImageNet con deep learning. Su arquitectura CNN demostró una precisión sin precedentes en clasificación de imágenes.<br />
-                                            Esto se logro mediante millones de fotos reales que las personas etiquetaron detalladamente usando Amazon Mchanical Turk, permitiendo construir una base de datos organizada segun la jerarquia de WordNet.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="card-left">
-                            <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-pink-500">
-                                <div class="flex items-start">
-                                    <div class="bg-pink-100 p-3 rounded-lg mr-4">
-                                        <i class="fas fa-gamepad text-pink-600 text-xl"></i>
-                                    </div>
-                                    <div>
-                                        <div class="flex items-center mb-2">
-                                            <span class="inline-block bg-pink-100 text-pink-800 px-3 py-1 rounded-full text-sm font-semibold">2016</span>
-                                        </div>
-                                        <h3 class="text-xl font-bold text-gray-800 mb-2">AlphaGo</h3>
-                                        <p class="text-gray-600">
-                                            AlphaGo fue una red neuronal desarrollada por Deep Mind con el unico objetivo de ganar al campeon del mundo de Go. Este desarrollo se logro despues de dos anios de trabajo 
-                                            codificando un algoritmo capaz de aprender las reglas del juego Go, entranandolo con miles de partidas descargadas de internet.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="card-right">
-                            <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-pink-500">
-                                <div class="flex items-start">
-                                    <div class="bg-pink-100 p-3 rounded-lg mr-4">
-                                        <i class="fas fa-language text-pink-600 text-xl"></i>
-                                    </div>
-                                    <div>
-                                        <div class="flex items-center mb-2">
-                                            <span class="inline-block bg-pink-100 text-pink-800 px-3 py-1 rounded-full text-sm font-semibold">2018</span>
-                                        </div>
-                                        <h3 class="text-xl font-bold text-gray-800 mb-2">Modelos Transformer</h3>
-                                        <p class="text-gray-600">
-                                            BERT (Bidirectional Encoder Representations from Transformers) es el primer LLM desarollado en 2018 por Google. El exito de BERT se debio a su arquitectura de transformadores, la cual se basa 
-                                            en el mecanismo de la atencion. Originalmente las predicciones eran unidireccionales, es decir, prediciendo la siguiente palabra. Las arquitecturas de transformadores son bidireccionales, es decir, 
-                                            predicen basado en palabras anteriores y siguientes.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="card-left">
-                            <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-pink-500">
-                                <div class="flex items-start">
-                                    <div class="bg-pink-100 p-3 rounded-lg mr-4">
-                                        <i class="fas fa-magic text-pink-600 text-xl"></i>
-                                    </div>
-                                    <div>
-                                        <div class="flex items-center mb-2">
-                                            <span class="inline-block bg-pink-100 text-pink-800 px-3 py-1 rounded-full text-sm font-semibold">2022</span>
-                                        </div>
-                                        <h3 class="text-xl font-bold text-gray-800 mb-2">IA Generativa</h3>
-                                        <p class="text-gray-600">
-                                            Despues de el lanzamiento de ChatGPT, basado en el modelo GPT-3.5, en noviembre de 2022, la inteligencia artificial tomo un rumbo inesperado. A diferencia del pasado , como con ELIZA, los modelos de IA 
-                                            generativa no tienen reglas o plantillas y son expuestos al mundo mediante entrenamiento con informacion del mundo real, desarrollando inteligencia.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="timeline-dot mt-20" style="background-color: #10b981;">
-                
-            </div>
-        </div>
-        
+        <div class="timeline-dot mt-20" style="background-color: #10b981"></div>
+      </div>
 
-<div class="mt-20 pt-12 border-t border-gray-100">
-    <div class="max-w-3xl mx-auto px-4">
+      <div class="mt-20 pt-12 border-t border-gray-100">
+        <div class="max-w-3xl mx-auto px-4">
+          <h3 class="text-xl font-semibold text-gray-800 text-center mb-8">Referencias Bibliográficas</h3>
 
-        <h3 class="text-xl font-semibold text-gray-800 text-center mb-8">Referencias Bibliográficas</h3>
-        
-
-<div class="space-y-4 mb-10">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="space-y-3">
-            <div class="border-l-4 border-blue-500 pl-4 py-2">
-                <a href="https://telefonicatech.com/blog/mycin-el-comienzo-de-la-inteligencia" 
-                   target="_blank" 
-                   class="font-medium text-blue-800 hover:text-blue-600 flex items-start group">
+          <div class="space-y-4 mb-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="space-y-3">
+                <div class="border-l-4 border-blue-500 pl-4 py-2">
+                  <a
+                    href="https://telefonicatech.com/blog/mycin-el-comienzo-de-la-inteligencia"
+                    target="_blank"
+                    class="font-medium text-blue-800 hover:text-blue-600 flex items-start group">
                     <i class="fas fa-external-link-alt text-blue-400 mt-1 mr-2 text-sm group-hover:translate-x-1 transition-transform"></i>
                     <div>
-                        <div class="font-medium">Telefónica Tech</div>
-                        <div class="text-gray-600 text-sm mt-1">"MYCIN: El comienzo de la inteligencia"</div>
+                      <div class="font-medium">Telefónica Tech</div>
+                      <div class="text-gray-600 text-sm mt-1">"MYCIN: El comienzo de la inteligencia"</div>
                     </div>
-                </a>
-            </div>
-            
-            <div class="border-l-4 border-green-500 pl-4 py-2">
-                <a href="https://es.wikipedia.org/wiki/Prueba_de_Turing" 
-                   target="_blank" 
-                   class="font-medium text-blue-800 hover:text-blue-600 flex items-start group">
+                  </a>
+                </div>
+
+                <div class="border-l-4 border-green-500 pl-4 py-2">
+                  <a href="https://es.wikipedia.org/wiki/Prueba_de_Turing" target="_blank" class="font-medium text-blue-800 hover:text-blue-600 flex items-start group">
                     <i class="fab fa-wikipedia-w text-green-400 mt-1 mr-2 text-sm"></i>
                     <div>
-                        <div class="font-medium">Wikipedia</div>
-                        <div class="text-gray-600 text-sm mt-1">"Prueba de Turing"</div>
+                      <div class="font-medium">Wikipedia</div>
+                      <div class="text-gray-600 text-sm mt-1">"Prueba de Turing"</div>
                     </div>
-                </a>
-            </div>
-            
-            <div class="border-l-4 border-orange-500 pl-4 py-2">
-                <a href="https://www.rtve.es/noticias/20090313/google-lanza-un-servicio-que-convierte-los-mensajes-de-voz-en-texto/248481.shtml" 
-                   target="_blank" 
-                   class="font-medium text-blue-800 hover:text-blue-600 flex items-start group">
+                  </a>
+                </div>
+
+                <div class="border-l-4 border-orange-500 pl-4 py-2">
+                  <a
+                    href="https://www.rtve.es/noticias/20090313/google-lanza-un-servicio-que-convierte-los-mensajes-de-voz-en-texto/248481.shtml"
+                    target="_blank"
+                    class="font-medium text-blue-800 hover:text-blue-600 flex items-start group">
                     <i class="fas fa-newspaper text-orange-400 mt-1 mr-2 text-sm group-hover:translate-x-1 transition-transform"></i>
                     <div>
-                        <div class="font-medium">RTVE</div>
-                        <div class="text-gray-600 text-sm mt-1">"Google lanza servicio de voz a texto"</div>
+                      <div class="font-medium">RTVE</div>
+                      <div class="text-gray-600 text-sm mt-1">"Google lanza servicio de voz a texto"</div>
                     </div>
-                </a>
-            </div>
-        </div>
-        
-        <div class="space-y-3">
-            <div class="border-l-4 border-red-500 pl-4 py-2">
-                <a href="https://medium.com/probo-ai/geoffrey-hinton-the-mind-behind-deep-learning-revolution-e895b228d9b3" 
-                   target="_blank" 
-                   class="font-medium text-blue-800 hover:text-blue-600 flex items-start group">
+                  </a>
+                </div>
+              </div>
+
+              <div class="space-y-3">
+                <div class="border-l-4 border-red-500 pl-4 py-2">
+                  <a
+                    href="https://medium.com/probo-ai/geoffrey-hinton-the-mind-behind-deep-learning-revolution-e895b228d9b3"
+                    target="_blank"
+                    class="font-medium text-blue-800 hover:text-blue-600 flex items-start group">
                     <i class="fab fa-medium text-red-400 mt-1 mr-2 text-sm group-hover:translate-x-1 transition-transform"></i>
                     <div>
-                        <div class="font-medium">Medium</div>
-                        <div class="text-gray-600 text-sm mt-1">"Geoffrey Hinton: mente detrás del Deep Learning"</div>
+                      <div class="font-medium">Medium</div>
+                      <div class="text-gray-600 text-sm mt-1">"Geoffrey Hinton: mente detrás del Deep Learning"</div>
                     </div>
-                </a>
-            </div>
-            
-            <div class="border-l-4 border-teal-500 pl-4 py-2">
-                <a href="https://es.wikipedia.org/wiki/Retropropagaci%C3%B3n" 
-                   target="_blank" 
-                   class="font-medium text-blue-800 hover:text-blue-600 flex items-start group">
+                  </a>
+                </div>
+
+                <div class="border-l-4 border-teal-500 pl-4 py-2">
+                  <a href="https://es.wikipedia.org/wiki/Retropropagaci%C3%B3n" target="_blank" class="font-medium text-blue-800 hover:text-blue-600 flex items-start group">
                     <i class="fab fa-wikipedia-w text-teal-400 mt-1 mr-2 text-sm"></i>
                     <div>
-                        <div class="font-medium">Wikipedia</div>
-                        <div class="text-gray-600 text-sm mt-1">"Retropropagación del error"</div>
+                      <div class="font-medium">Wikipedia</div>
+                      <div class="text-gray-600 text-sm mt-1">"Retropropagación del error"</div>
                     </div>
-                </a>
-            </div>
-            
-            <div class="border-l-4 border-indigo-500 pl-4 py-2">
-                <a href="https://theairevolution.news/alexnet-el-experimento-casero-que-dio-el-pistoletazo-de-salida-a-la-carrera-de-la-ia/" 
-                   target="_blank" 
-                   class="font-medium text-blue-800 hover:text-blue-600 flex items-start group">
+                  </a>
+                </div>
+
+                <div class="border-l-4 border-indigo-500 pl-4 py-2">
+                  <a
+                    href="https://theairevolution.news/alexnet-el-experimento-casero-que-dio-el-pistoletazo-de-salida-a-la-carrera-de-la-ia/"
+                    target="_blank"
+                    class="font-medium text-blue-800 hover:text-blue-600 flex items-start group">
                     <i class="fas fa-rocket text-indigo-400 mt-1 mr-2 text-sm group-hover:translate-x-1 transition-transform"></i>
                     <div>
-                        <div class="font-medium">The AI Revolution</div>
-                        <div class="text-gray-600 text-sm mt-1">"AlexNet: el experimento casero"</div>
+                      <div class="font-medium">The AI Revolution</div>
+                      <div class="text-gray-600 text-sm mt-1">"AlexNet: el experimento casero"</div>
                     </div>
-                </a>
+                  </a>
+                </div>
+              </div>
             </div>
-        </div>
-    </div>
-    
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="space-y-3">
-            <div class="border-l-4 border-purple-500 pl-4 py-2">
-                <a href="https://www.obsbusiness.school/blog/alphago-y-el-estado-de-la-inteligencia-artificial" 
-                   target="_blank" 
-                   class="font-medium text-blue-800 hover:text-blue-600 flex items-start group">
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="space-y-3">
+                <div class="border-l-4 border-purple-500 pl-4 py-2">
+                  <a
+                    href="https://www.obsbusiness.school/blog/alphago-y-el-estado-de-la-inteligencia-artificial"
+                    target="_blank"
+                    class="font-medium text-blue-800 hover:text-blue-600 flex items-start group">
                     <i class="fas fa-chess-queen text-purple-400 mt-1 mr-2 text-sm group-hover:translate-x-1 transition-transform"></i>
                     <div>
-                        <div class="font-medium">OBS Business School</div>
-                        <div class="text-gray-600 text-sm mt-1">"AlphaGo y el estado de la IA"</div>
+                      <div class="font-medium">OBS Business School</div>
+                      <div class="text-gray-600 text-sm mt-1">"AlphaGo y el estado de la IA"</div>
                     </div>
-                </a>
-            </div>
-            
-            <div class="border-l-4 border-yellow-500 pl-4 py-2">
-                <a href="https://www.datacamp.com/es/blog/what-is-bert-an-intro-to-bert-models" 
-                   target="_blank" 
-                   class="font-medium text-blue-800 hover:text-blue-600 flex items-start group">
+                  </a>
+                </div>
+
+                <div class="border-l-4 border-yellow-500 pl-4 py-2">
+                  <a
+                    href="https://www.datacamp.com/es/blog/what-is-bert-an-intro-to-bert-models"
+                    target="_blank"
+                    class="font-medium text-blue-800 hover:text-blue-600 flex items-start group">
                     <i class="fas fa-code text-yellow-400 mt-1 mr-2 text-sm group-hover:translate-x-1 transition-transform"></i>
                     <div>
-                        <div class="font-medium">DataCamp</div>
-                        <div class="text-gray-600 text-sm mt-1">"¿Qué es BERT? Introducción a modelos BERT"</div>
+                      <div class="font-medium">DataCamp</div>
+                      <div class="text-gray-600 text-sm mt-1">"¿Qué es BERT? Introducción a modelos BERT"</div>
                     </div>
-                </a>
-            </div>
-        </div>
-        
-        <div class="space-y-3">
-            <div class="border-l-4 border-cyan-500 pl-4 py-2">
-                <a href="https://www.ibm.com/ibm/history/ibm100/us/en/icons/deepblue/" 
-                   target="_blank" 
-                   class="font-medium text-blue-800 hover:text-blue-600 flex items-start group">
+                  </a>
+                </div>
+              </div>
+
+              <div class="space-y-3">
+                <div class="border-l-4 border-cyan-500 pl-4 py-2">
+                  <a
+                    href="https://www.ibm.com/ibm/history/ibm100/us/en/icons/deepblue/"
+                    target="_blank"
+                    class="font-medium text-blue-800 hover:text-blue-600 flex items-start group">
                     <i class="fas fa-chess-board text-cyan-400 mt-1 mr-2 text-sm group-hover:translate-x-1 transition-transform"></i>
                     <div>
-                        <div class="font-medium">IBM Archives</div>
-                        <div class="text-gray-600 text-sm mt-1">"Deep Blue vs Garry Kasparov"</div>
+                      <div class="font-medium">IBM Archives</div>
+                      <div class="text-gray-600 text-sm mt-1">"Deep Blue vs Garry Kasparov"</div>
                     </div>
-                </a>
-            </div>
-            
-            <div class="border-l-4 border-pink-500 pl-4 py-2">
-                <a href="https://openai.com/research/gpt-4" 
-                   target="_blank" 
-                   class="font-medium text-blue-800 hover:text-blue-600 flex items-start group">
+                  </a>
+                </div>
+
+                <div class="border-l-4 border-pink-500 pl-4 py-2">
+                  <a href="https://openai.com/research/gpt-4" target="_blank" class="font-medium text-blue-800 hover:text-blue-600 flex items-start group">
                     <i class="fas fa-robot text-pink-400 mt-1 mr-2 text-sm group-hover:translate-x-1 transition-transform"></i>
                     <div>
-                        <div class="font-medium">OpenAI</div>
-                        <div class="text-gray-600 text-sm mt-1">"GPT-4 Research Paper"</div>
+                      <div class="font-medium">OpenAI</div>
+                      <div class="text-gray-600 text-sm mt-1">"GPT-4 Research Paper"</div>
                     </div>
-                </a>
+                  </a>
+                </div>
+              </div>
             </div>
-        </div>
-    </div>
-</div>
-        
-        <div class="text-center pt-6 border-t border-gray-100">
+          </div>
+
+          <div class="text-center pt-6 border-t border-gray-100">
             <div class="flex justify-center space-x-6 mb-4">
-                <a href="https://github.com/maleficarum" class="text-gray-500 hover:text-gray-800">
-                    <i class="fab fa-github"></i>
-                </a>
-                <a href="https://www.linkedin.com/in/oscariventura/" class="text-gray-500 hover:text-gray-800">
-                    <i class="fab fa-linkedin"></i>
-                </a>
+              <a href="https://github.com/maleficarum" class="text-gray-500 hover:text-gray-800">
+                <i class="fab fa-github"></i>
+              </a>
+              <a href="https://www.linkedin.com/in/oscariventura/" class="text-gray-500 hover:text-gray-800">
+                <i class="fab fa-linkedin"></i>
+              </a>
             </div>
-            <p class="text-gray-500 text-sm">
-                Por <a href="http://maleficarum.mx" class="text-blue-600">Oscar I Hernandez V</a>
-            </p>
+            <p class="text-gray-500 text-sm">Por <a href="http://maleficarum.mx" class="text-blue-600">Oscar I Hernandez V</a></p>
+          </div>
         </div>
-    </div>
-</div>
-        
+      </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const dots = document.querySelectorAll('.timeline-dot');
-            
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.style.transform = 'translateX(-50%) scale(1.2)';
-                        entry.target.style.transition = 'transform 0.5s ease';
-                        
-                        setTimeout(() => {
-                            entry.target.style.transform = 'translateX(-50%) scale(1)';
-                        }, 300);
-                    }
-                });
-            }, { threshold: 0.5 });
-            
-            dots.forEach(dot => observer.observe(dot));
-        });
+      document.addEventListener('DOMContentLoaded', function () {
+        const dots = document.querySelectorAll('.timeline-dot');
+
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.style.transform = 'translateX(-50%) scale(1.2)';
+                entry.target.style.transition = 'transform 0.5s ease';
+
+                setTimeout(() => {
+                  entry.target.style.transform = 'translateX(-50%) scale(1)';
+                }, 300);
+              }
+            });
+          },
+          { threshold: 0.5 },
+        );
+
+        dots.forEach((dot) => observer.observe(dot));
+      });
     </script>
-</body>
+  </body>
 </html>
